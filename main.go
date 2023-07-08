@@ -12,16 +12,16 @@ import (
 	. "m7s.live/engine/v4"
 	"m7s.live/engine/v4/config"
 )
-type MyMonitorConfig struct {
+type SysInfoConfig struct {
     config.HTTP
 		
 }
 
-var MyMonitorPluginConfig = &MyMonitorConfig{}
+var SysInfoPluginConfig = &SysInfoConfig{}
 
-var _ = InstallPlugin(MyMonitorPluginConfig)
+var _ = InstallPlugin(SysInfoPluginConfig)
 
-func (conf *MyMonitorConfig) OnEvent(event any){
+func (conf *SysInfoConfig) OnEvent(event any){
  	switch event.(type) {
     case FirstConfig: //插件初始化逻辑
     case *Stream://按需拉流逻辑
@@ -46,7 +46,7 @@ type MemInfo struct {
 	Percent float64
 }
 
-func (p *MyMonitorConfig) API_MemInfo(w http.ResponseWriter, r *http.Request) {
+func (p *SysInfoConfig) API_MemInfo(w http.ResponseWriter, r *http.Request) {
     memInfo, error := mem.VirtualMemory()
 		var result Result[*MemInfo] = Result[*MemInfo]{ }
 		if(error == nil){
@@ -75,7 +75,7 @@ type CpuInfo struct {
 	Time string
 	Percent float64
 }
-func (p *MyMonitorConfig) API_CpuInfo(w http.ResponseWriter, r *http.Request) {
+func (p *SysInfoConfig) API_CpuInfo(w http.ResponseWriter, r *http.Request) {
     percent, error := cpu.Percent(time.Second, false)
 		var result Result[*CpuInfo] = Result[*CpuInfo]{ }
 		if(error == nil){
@@ -107,7 +107,7 @@ type DiskInfo struct {
 	Used   uint64
 	Free   uint64
 }
-func (p *MyMonitorConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
+func (p *SysInfoConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
 		parts, error := disk.Partitions(true)
 		var result Result[[]*DiskInfo] = Result[[]*DiskInfo]{ }
 
@@ -146,7 +146,7 @@ type NetworkInfo struct {
 	Upload uint64
 }
 
-func (p *MyMonitorConfig) API_NetworkInfo(w http.ResponseWriter, r *http.Request) {
+func (p *SysInfoConfig) API_NetworkInfo(w http.ResponseWriter, r *http.Request) {
     info, error := net.IOCounters(false)
 		var result Result[*NetworkInfo] = Result[*NetworkInfo]{ }
 		if(error == nil){
