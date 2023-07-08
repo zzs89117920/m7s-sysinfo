@@ -35,7 +35,7 @@ func (conf *SysInfoConfig) OnEvent(event any){
 }
 type Result[T []*DiskInfo | *NetworkInfo | *CpuInfo | *MemInfo] struct {
 	Code int
-	Msg string
+	Message string
 	Data T
 }
 var (
@@ -58,13 +58,13 @@ func (p *SysInfoConfig) API_MemInfo(w http.ResponseWriter, r *http.Request) {
 
 			result.Code = 200
 			result.Data = memInfo
-			result.Msg = ""
+			result.Message = ""
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
 		}else{
 			result.Code = 400
-			result.Msg = error.Error()
+			result.Message = error.Error()
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
@@ -87,13 +87,13 @@ func (p *SysInfoConfig) API_CpuInfo(w http.ResponseWriter, r *http.Request) {
 
 			result.Code = 200
 			result.Data = cpuInfo
-			result.Msg = ""
+			result.Message = ""
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
 		}else{
 			result.Code = 400
-			result.Msg = error.Error()
+			result.Message = error.Error()
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
@@ -127,13 +127,13 @@ func (p *SysInfoConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
 
 			result.Code = 200
 			result.Data = diskInfos
-			result.Msg = ""
+			result.Message = ""
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
 		}else{
 			result.Code = 400
-			result.Msg = error.Error()
+			result.Message = error.Error()
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
@@ -171,13 +171,13 @@ func (p *SysInfoConfig) API_NetworkInfo(w http.ResponseWriter, r *http.Request) 
 
 			result.Code = 200
 			result.Data = networkInfo
-			result.Msg = ""
+			result.Message = ""
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
 		}else{
 			result.Code = 400
-			result.Msg = error.Error()
+			result.Message = error.Error()
 			jsonBytes, _ := json.Marshal(result)
 			w.Write([]byte(jsonBytes))
 			return
