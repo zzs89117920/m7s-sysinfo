@@ -34,16 +34,16 @@ func (conf *SysInfoConfig) OnEvent(event any){
   }
 }
 type Result[T []*DiskInfo | *NetworkInfo | *CpuInfo | *MemInfo] struct {
-	Code int
-	Message string
-	Data T
+	Code int `json:"code"`
+	Message string `json:"message"`
+	Data T `json:"data"`
 }
 var (
 	timeFormat = "2006-01-02 15:04:05"
 )
 type MemInfo struct {
-	Time string
-	Percent float64
+	Time string `json:"time"`
+	Percent float64 `json:"percent"`
 }
 
 func (p *SysInfoConfig) API_MemInfo(w http.ResponseWriter, r *http.Request) {
@@ -72,8 +72,8 @@ func (p *SysInfoConfig) API_MemInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 type CpuInfo struct {
-	Time string
-	Percent float64
+	Time string `json:"time"`
+	Percent float64 `json:"percent"`
 }
 func (p *SysInfoConfig) API_CpuInfo(w http.ResponseWriter, r *http.Request) {
     percent, error := cpu.Percent(time.Second, false)
@@ -102,10 +102,10 @@ func (p *SysInfoConfig) API_CpuInfo(w http.ResponseWriter, r *http.Request) {
 
 
 type DiskInfo struct {
-	Time string
-	Device   string
-	Used   uint64
-	Free   uint64
+	Time string `json:"time"`
+	Device   string `json:"device"`
+	Used   uint64 `json:"used"`
+	Free   uint64 `json:"free"`
 }
 func (p *SysInfoConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
 		parts, error := disk.Partitions(true)
@@ -141,9 +141,9 @@ func (p *SysInfoConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 type NetworkInfo struct {
-	Time string
-	Download uint64
-	Upload uint64
+	Time string `json:"time"`
+	Download uint64 `json:"download"`
+	Upload uint64 `json:"upload"`
 }
 
 func (p *SysInfoConfig) API_NetworkInfo(w http.ResponseWriter, r *http.Request) {
