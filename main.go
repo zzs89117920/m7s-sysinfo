@@ -3,6 +3,7 @@ package sysinfo
 import (
 	"encoding/json"
 	"net/http"
+	"runtime"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
@@ -108,8 +109,36 @@ type DiskInfo struct {
 	Free   uint64 `json:"free"`
 }
 func (p *SysInfoConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
+	var result Result[[]*DiskInfo] = Result[[]*DiskInfo]{ }
+	if runtime.GOOS == "linux" {
+	
+		var diskInfos []*DiskInfo
+
+		diskInfo, _ := disk.Usage("/")
+		diskInfos = append(diskInfos, &DiskInfo{ 
+				Time: time.Now().Format(timeFormat),
+				Device:"/", 
+				Used:diskInfo.Used, 
+				Free: diskInfo.Free,
+			})
+
+		diskInfo, _ = disk.Usage("/home")
+		diskInfos = append(diskInfos, &DiskInfo{ 
+				Time: time.Now().Format(timeFormat),
+				Device:"/home", 
+				Used:diskInfo.Used, 
+				Free: diskInfo.Free,
+			})
+			
+		result.Code = 200
+		result.Data = diskInfos
+		result.Message = ""
+		jsonBytes, _ := json.Marshal(result)
+		w.Write([]byte(jsonBytes))
+		return
+	} else if runtime.GOOS == "windows" {	
+		
 		parts, error := disk.Partitions(true)
-		var result Result[[]*DiskInfo] = Result[[]*DiskInfo]{ }
 
 		if(error == nil){
 			
@@ -138,7 +167,9 @@ func (p *SysInfoConfig) API_DiskInfo(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(jsonBytes))
 			return
 		}
+	}
 }
+
 
 type NetworkInfo struct {
 	Time string `json:"time"`
